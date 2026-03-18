@@ -5,120 +5,379 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2026 釜山賞櫻之旅</title>
     <style>
-        :root {
-            --primary: #ffb7c5;
-            --accent: #ff6b81;
-            --bg: #fff5f7;
-            --card-white: #ffffff;
-        }
+        /* ==============================
+           1. 全域樣式 & 背景設定 (修改這裡的 URL)
+           ============================== */
         body {
             font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-            background-color: var(--bg);
-            margin: 0; padding: 0; color: #444;
+            margin: 0;
+            padding: 0;
+            color: #333;
             line-height: 1.6;
+            /* 👇👇【微調點 1：更換背景圖】👇👇
+               將此 URL 替換為你的櫻花背景圖網址。 */
+            background-image: url('https://raw.githubusercontent.com/skyrene03/username.github.io/main/your-cherry-blossom-background.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
-        /* 頂部橫幅 */
-        .hero {
-            background: linear-gradient(135deg, rgba(255,183,197,0.8), rgba(255,107,129,0.8)), 
-                        url('https://images.unsplash.com/photo-1528660351311-df232d9894e4?auto=format&fit=crop&q=80&w=1000');
-            background-size: cover; background-position: center;
-            height: 220px; display: flex; align-items: center; justify-content: center;
-            color: white; text-align: center; flex-direction: column;
-        }
-        .hero h1 { margin: 0; font-size: 2.2rem; text-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        
-        .container { max-width: 550px; margin: -40px auto 50px; padding: 0 15px; }
 
-        /* 互動卡片樣式 */
-        .day-card {
-            background: var(--card-white);
-            border-radius: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 25px rgba(255,183,197,0.2);
-            overflow: hidden;
-            transition: transform 0.3s ease;
-            cursor: pointer;
+        /* ==============================
+           2. Sherry 風格版面結構
+           ============================== */
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.4); /* 半透明背景，襯托文字 */
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .day-card:hover { transform: translateY(-5px); }
+        header h1 {
+            color: white;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+        }
+        header p {
+            color: white;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+            margin: 10px 0 0;
+        }
 
-        .day-header {
-            padding: 20px;
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto 50px;
+            padding: 0 15px;
+        }
+
+        /* ==============================
+           3. 導覽按鈕樣式 (全保留)
+           ============================== */
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            gap: 10px;
+        }
+        .nav-btn {
             background: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #fef0f2;
-        }
-        .day-header h2 { margin: 0; font-size: 1.25rem; color: var(--accent); }
-        .day-header .date { font-size: 0.9rem; color: #888; font-weight: bold; }
-
-        /* 行程內容區（預設展開，點擊可收合） */
-        .day-content {
-            padding: 0 20px 20px;
-            display: block; /* 初始狀態為顯示 */
-            animation: slideDown 0.4s ease-out;
-        }
-
-        .item {
-            display: flex;
-            padding: 15px 0;
-            border-bottom: 1px dashed #eee;
-        }
-        .item:last-child { border-bottom: none; }
-
-        .time {
-            min-width: 60px;
-            font-weight: 900;
-            color: var(--accent);
+            border-radius: 30px;
+            padding: 8px 18px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
             font-size: 0.95rem;
+            color: #555;
+            font-weight: 500;
         }
-        .info b { display: block; font-size: 1.05rem; color: #333; }
-        .info span { font-size: 0.85rem; color: #777; }
+        .nav-btn:hover, .nav-btn.active {
+            background-color: #007bff; /* sherry 原本的藍色 */
+            color: white;
+            transform: translateY(-2px);
+        }
 
-        /* 標籤 */
-        .tag {
-            font-size: 0.7rem; padding: 2px 8px; border-radius: 6px;
-            margin-left: 5px; vertical-align: middle; font-weight: bold;
+        /* ==============================
+           4. 匯率計算機樣式 (全保留)
+           ============================== */
+        .calculator-card {
+            background: rgba(255, 255, 255, 0.85); /* 半透明磨砂質感 */
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            display: block; /* 初始顯示 */
         }
-        .tag-sakura { background: #ffe3e8; color: #ff4d6d; }
-        .tag-food { background: #fff4e6; color: #d35400; }
+        .calculator-header {
+            color: #0056b3;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .calc-group {
+            margin-bottom: 20px;
+        }
+        .calc-label {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .calc-input-group {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            overflow: hidden;
+        }
+        .calc-prefix {
+            background: #f8f9fa;
+            color: #999;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            border-right: 1px solid #ddd;
+        }
+        .calc-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            text-align: right;
+        }
+        .calc-input:focus {
+            background: #fff0f3; /* 焦點時的淺粉色 */
+        }
+        .calc-divider {
+            color: #999;
+            font-size: 0.85rem;
+            text-align: center;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .calc-divider::before, .calc-divider::after {
+            content: "";
+            height: 1px;
+            background: #eee;
+            flex: 1;
+        }
+
+        /* ==============================
+           5. 天數卡片排版樣式 (模仿卡片式)
+           ============================== */
+        .content-section {
+            display: none; /* 初始隱藏，用 JS 控制 */
+            animation: fadeIn 0.5s ease-out;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .day-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .day-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #fff0f3;
+            padding-bottom: 10px;
+        }
+        .day-header h2 { color: #ff6b81; margin: 0; font-size: 1.4rem; }
+        .day-header .date { margin-left: auto; color: #888; font-weight: bold; }
+        .schedule-item { display: flex; margin-bottom: 15px; }
+        .time { min-width: 65px; font-weight: 800; color: #ff6b81; }
+        .content { padding-left: 15px; border-left: 2px solid #eee; flex: 1; }
+        .content b { display: block; font-size: 1.05rem; }
+        .content span { font-size: 0.9rem; color: #666; }
+        .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 5px; margin-left: 5px; font-weight: bold; }
         .tag-vbp { background: #e3f2fd; color: #1976d2; }
+        .tag-food { background: #fff3e0; color: #e65100; }
+        .tag-sakura { background: #fff0f3; color: #d81b60; }
 
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
+        /* ==============================
+           6. 其他內容樣式
+           ============================== */
+        .simple-content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-<div class="hero">
+<header>
     <h1>🌸 2026 釜山賞櫻之旅</h1>
-    <p>與家人的溫馨六日遊</p>
-</div>
+    <p>2026.04.08 - 04.13 | 孝親六日遊</p>
+</header>
 
-<div class="container">
-    <div class="day-card" onclick="toggleCard(this)">
-        <div class="day-header">
-            <h2>Day 1 | 雙倍櫻花震撼</h2>
-            <span class="date">04/08 (三)</span>
+<div class="main-container">
+    <div class="nav-container">
+        <button class="nav-btn active" onclick="showSection('calculator', this)">💱 匯率</button>
+        <button class="nav-btn" onclick="showSection('intro', this)">釜山介紹</button>
+        <button class="nav-btn" onclick="showSection('prep', this)">行前準備</button>
+        <button class="nav-btn" onclick="showSection('day1', this)">Day 1</button>
+        <button class="nav-btn" onclick="showSection('day2', this)">Day 2</button>
+        <button class="nav-btn" onclick="showSection('day3', this)">Day 3</button>
+        <button class="nav-btn" onclick="showSection('day4', this)">Day 4</button>
+        <button class="nav-btn" onclick="showSection('day5', this)">Day 5</button>
+        <button class="nav-btn" onclick="showSection('day6', this)">Day 6</button>
+    </div>
+
+    <div id="calculator" class="calculator-card content-section active">
+        <div class="calculator-header">
+            <span>💱</span> 韓幣匯率計算機
         </div>
-        <div class="day-content">
-            <div class="item">
-                <div class="time">08:00</div>
-                <div class="info"><b>沙上豬肉湯飯</b><span class="tag tag-food">推薦</span><span>下機第一餐暖胃</span></div>
+        
+        <div class="calc-group">
+            <label class="calc-label">目前匯率 (1 台幣 = ? 韓元)</label>
+            <div class="calc-input-group">
+                <span class="calc-prefix">RATE</span>
+                <input type="number" id="rateInput" class="calc-input" value="42" oninput="calculateEx('rate')">
             </div>
-            <div class="item">
-                <div class="time">10:00</div>
-                <div class="info"><b>大渚生態公園</b><span class="tag tag-sakura">賞櫻</span><span>粉白櫻花隧道與油菜花</span></div>
+        </div>
+
+        <div class="calc-group">
+            <label class="calc-label">韓元 (KRW)</label>
+            <div class="calc-input-group">
+                <span class="calc-prefix">₩</span>
+                <input type="number" id="krwInput" class="calc-input" placeholder="輸入韓元" oninput="calculateEx('krw')">
             </div>
-            <div class="item">
-                <div class="time">15:00</div>
-                <div class="info"><b>南川洞櫻花路</b><span class="tag tag-sakura">必看</span><span>海邊的最美櫻吹雪</span></div>
+        </div>
+
+        <div class="calc-divider">↔️</div>
+
+        <div class="calc-group">
+            <label class="calc-label">台幣 (TWD)</label>
+            <div class="calc-input-group">
+                <span class="calc-prefix">$</span>
+                <input type="number" id="twdInput" class="calc-input" placeholder="輸入台幣" oninput="calculateEx('twd')">
             </div>
         </div>
     </div>
 
-    <div class="day-card" onclick="toggleCard(this)">
-        <div class="day-header">
-            <h2>Day
+    <div id="intro" class="content-section">
+        <div class="simple-content-card">
+            <h3>釜山廣域市</h3>
+            <p>韓國第二大城市及最大港口，以絕美海景、美味海鮮、特色壁畫村及春季滿山滿谷的櫻花聞名。</p>
+        </div>
+    </div>
+
+    <div id="prep" class="content-section">
+        <div class="simple-content-card">
+            <h3>準備清單</h3>
+            <ul>
+                <li>韓國簽證 (K-ETA) / 護照</li>
+                <li>釜山 Pass (VBP)</li>
+                <li>網路卡 (SIM/eSIM)</li>
+                <li>Wowpass / T-money 卡</li>
+                <li>韓國電壓轉接頭</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="day1" class="content-section">
+        <div class="day-card">
+            <div class="day-header">
+                <h2>Day 1 | 抵達釜山．極致賞櫻</h2>
+                <div class="date">04/08 (三)</div>
+            </div>
+            <div class="schedule-item">
+                <div class="time">06:10</div>
+                <div class="content"><b>抵達金海機場</b><span>搭乘航班 NTU 123 (02:40-06:10)</span></div>
+            </div>
+            <div class="schedule-item">
+                <div class="time">08:00</div>
+                <div class="content"><b>沙上豬肉湯飯</b><span class="tag tag-food">早餐</span><span>紅眼航班暖胃首選</span></div>
+            </div>
+            <div class="schedule-item">
+                <div class="time">10:00</div>
+                <div class="content"><b>大渚生態公園</b><span class="tag tag-sakura">賞櫻</span><span>粉白櫻花與黃色油菜花海</span></div>
+            </div>
+            <div class="schedule-item">
+                <div class="time">15:00</div>
+                <div class="content"><b>南川洞櫻花路</b><span class="tag tag-sakura">最美</span><span>浪漫海邊櫻吹雪隧道</span></div>
+            </div>
+            <div class="schedule-item">
+                <div class="time">17:00</div>
+                <div class="info"><b>廣安里海邊</b><span>飯店休息補眠，晚上看大橋夜景</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="day2" class="content-section">
+        <div class="day-card">
+            <div class="day-header">
+                <h2>Day 2 | 南浦夕陽．Pass 啟動</h2>
+                <div class="date">04/09 (四)</div>
+            </div>
+            <div class="schedule-item">
+                <div class="time">13:30</div>
+                <div class="content"><b>味贊王鹽烤肉</b><span class="tag tag-food">午餐</span><span>代烤超厚豬五花</span></div>
+            </div>
+            <div class="schedule-item">
+                <div class="time">16:30</div>
+                <div class="content"><b>松島纜車 / 龍宮雲橋</b><span class="tag tag-vbp">VBP啟動</span><span>看絕美海景夕陽</span></div>
+            </div>
+            <div class="schedule-item">
+                <div class="time">19:30</div>
+                <div class="content"><b>鑽石灣遊艇</b><span class="tag tag-vbp">VBP</span><span>浪漫廣安大橋夜景</span></div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+<script>
+    /* ==============================
+       JavaScript 1: 匯率計算機邏輯 (全保留)
+       ============================== */
+    function calculateEx(type) {
+        const rate = parseFloat(document.getElementById('rateInput').value);
+        const krw = document.getElementById('krwInput');
+        const twd = document.getElementById('twdInput');
+
+        if (!rate || rate <= 0) return;
+
+        if (type === 'krw' && krw.value) {
+            twd.value = (parseFloat(krw.value) / rate).toFixed(2);
+        } else if (type === 'twd' && twd.value) {
+            krw.value = (parseFloat(twd.value) * rate).toFixed(0);
+        } else if (type === 'rate') {
+            // 如果匯率改變，預設從韓元更新台幣
+            if (krw.value) {
+                twd.value = (parseFloat(krw.value) / rate).toFixed(2);
+            } else if (twd.value) {
+                krw.value = (parseFloat(twd.value) * rate).toFixed(0);
+            }
+        }
+    }
+
+    /* ==============================
+       JavaScript 2: 切換內容分頁邏輯
+       ============================== */
+    function showSection(sectionId, btnElement) {
+        // 1. 隱藏所有內容區塊
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // 2. 顯示點擊的內容區塊
+        const activeSection = document.getElementById(sectionId);
+        if (activeSection) {
+            activeSection.classList.add('active');
+        }
+
+        // 3. 更新按鈕狀態
+        const buttons = document.querySelectorAll('.nav-btn');
+        buttons.forEach(btn => {
+            btn.classList.remove('active');
+        });
+        btnElement.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
