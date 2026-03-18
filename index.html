@@ -5,169 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2026 釜山賞櫻之旅</title>
     <style>
-        :root {
-            --primary: #007bff; /* sherry 原本按鈕藍色 */
-            --accent: #ff6b81;
-            --glass: rgba(255, 255, 255, 0.5);
-            --blur: blur(15px);
-        }
-        body {
-            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-            margin: 0; padding: 0; color: #333;
-            /* 👇👇【微調點 1：更換全螢幕水彩/櫻花背景圖】👇👇
-               將此 URL 替換為你的背景圖網址。預設是一個櫻花圖 */
-            background: url('https://images.unsplash.com/photo-1528660351311-df232d9894e4?auto=format&fit=crop&q=80&w=1500') no-repeat center center fixed;
-            background-size: cover;
-        }
-
-        header { text-align: center; padding: 60px 20px 40px; color: white; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        header h1 { margin: 0; font-size: 2.5rem; letter-spacing: 2px; }
+        /* 視覺風格設定 */
+        :root { --blue: #007bff; --pink: #ff6b81; }
+        body { font-family: sans-serif; margin: 0; background: #fff5f7; color: #333; line-height: 1.5; }
         
-        /* 導覽按鈕區 (完全保留 Sherry 風格) */
-        .nav-bar {
-            display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;
-            margin-bottom: 30px; position: sticky; top: 15px; z-index: 100;
-        }
-        .nav-btn {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.5);
-            padding: 10px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            color: #555;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        /* 背景模糊效果 */
+        .bg { position: fixed; top:0; left:0; width:100%; height:100%; 
+               background: url('https://images.unsplash.com/photo-1528660351311-df232d9894e4?auto=format&fit=crop&q=80&w=1500') center/cover; 
+               opacity: 0.2; z-index: -1; }
 
-        .main-container { max-width: 800px; margin: 0 auto 50px; padding: 0 15px; }
+        header { text-align: center; padding: 40px 20px; }
+        
+        /* 導覽列 */
+        .nav-bar { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; position: sticky; top: 10px; z-index: 1000; }
+        .nav-btn { background: white; border: 1px solid #ddd; padding: 10px 18px; border-radius: 25px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .nav-btn.active { background: var(--blue); color: white; border-color: var(--blue); box-shadow: 0 4px 10px rgba(0,123,255,0.3); }
 
-        /* ==============================
-           玻璃擬態內容區 (Glassmorphism)
-           ============================== */
-        .content-section {
-            display: none;
-            background: var(--glass);
-            backdrop-filter: var(--blur);
-            border-radius: 25px;
-            padding: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            animation: fadeIn 0.5s ease-out;
-        }
-        .content-section.active { display: block; }
+        .container { max-width: 600px; margin: 0 auto 50px; padding: 0 15px; }
 
-        h3 { color: #0056b3; margin-top: 0; }
+        /* 內容區塊 */
+        .section { display: none; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .section.active { display: block; animation: fadeIn 0.4s; }
 
-        /* ==============================
-           A. 匯率計算機 (完全保留功能)
-           ============================== */
-        .calc-box { margin-top: 20px; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; color: #666; font-size: 0.9rem; margin-bottom: 5px; }
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(0,0,0,0.1);
-            font-size: 1.1rem;
-            background: rgba(255,255,255,0.9);
-            text-align: right;
-            outline: none;
-            transition: 0.3s;
-        }
-        input:focus { border-color: var(--accent); background: white; }
+        /* 匯率計算機 */
+        .calc-row { margin-bottom: 15px; }
+        .calc-row label { display: block; font-size: 0.8rem; color: #666; margin-bottom: 5px; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1.1rem; box-sizing: border-box; }
 
-        /* ==============================
-           B. 行前準備 Check List (圖 image_5.png)
-           ============================== */
-        .check-list-item {
-            display: flex; align-items: center; gap: 10px;
-            margin-bottom: 12px;
-            font-size: 1rem;
-        }
-        /* 互動式的 Checkbox */
-        .check-list-item input[type="checkbox"] {
-            width: 20px; height: 20px;
-            cursor: pointer;
-            text-align: center; /* 修正位置 */
-        }
-        /* 當選取時，文字變灰且加上刪除線 */
-        .check-list-item input[type="checkbox"]:checked + span {
-            color: #bbb;
-            text-decoration: line-through;
-        }
-
-        /* ==============================
-           C. 行程卡片排版
-           ============================== */
-        .day-header { color: var(--accent); border-bottom: 2px solid rgba(255,107,129,0.2); padding-bottom: 10px; margin-bottom: 20px; }
-        .day-item {
-            display: flex;
-            margin-bottom: 15px;
-            position: relative;
-        }
-        .time { min-width: 65px; font-weight: bold; color: var(--accent); }
-        .content { flex: 1; padding-left: 15px; border-left: 2px solid rgba(0,0,0,0.05); }
-        .content b { display: block; color: #333; margin-bottom: 3px; }
-        .content span { font-size: 0.9rem; color: #666; }
-
-        /* 行程圖片 */
-        .trip-img {
-            width: 100%; height: 250px;
-            object-fit: cover;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+        /* 行前準備清單 */
+        .check-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 1.1rem; cursor: pointer; }
+        .check-item input { width: 22px; height: 22px; cursor: pointer; margin: 0; }
+        .check-item input:checked + span { text-decoration: line-through; color: #bbb; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
+<div class="bg"></div>
+
 <header>
-    <h1>🌸 2026 釜山賞櫻之旅</h1>
-    <p>4/8 - 4/13 與家人的孝親六日遊</p>
+    <h1 style="color: #d81b60;">🌸 2026 釜山賞櫻</h1>
+    <p>4/08 - 4/13 孝親計畫</p>
 </header>
 
-<div class="main-container">
+<div class="container">
     <div class="nav-bar">
-        <button class="nav-btn active" onclick="tab(this, 'calc')">💱 匯率</button>
-        <button class="nav-btn" onclick="tab(this, 'prep')">行前準備</button>
-        <button class="nav-btn" onclick="tab(this, 'intro')">釜山介紹</button>
-        <button class="nav-btn" onclick="tab(this, 'd1')">Day 1</button>
-        <button class="nav-btn" onclick="tab(this, 'd2')">Day 2</button>
-        <button class="nav-btn" onclick="tab(this, 'd3')">Day 3</button>
-        <button class="nav-btn" onclick="tab(this, 'd4')">Day 4</button>
-        <button class="nav-btn" onclick="tab(this, 'd5')">Day 5</button>
-        <button class="nav-btn" onclick="tab(this, 'd6')">Day 6</button>
+        <button class="nav-btn active" onclick="showTab('calc', this)">💱 匯率</button>
+        <button class="nav-btn" onclick="showTab('prep', this)">行前準備</button>
+        <button class="nav-btn" onclick="showTab('d1', this)">Day 1</button>
+        <button class="nav-btn" onclick="showTab('d2', this)">Day 2</button>
+        <button class="nav-btn" onclick="showTab('d3', this)">Day 3</button>
     </div>
 
-    <div id="calc" class="content-section active">
-        <h3>💱 韓幣匯率試算</h3>
-        <div class="calc-box">
-            <div class="input-group">
-                <label>目前匯率 (1 TWD = ? KRW)</label>
-                <input type="number" id="rate" value="42" oninput="convert()">
-            </div>
-            <div class="input-group">
-                <label>韓元 (KRW) ₩</label>
-                <input type="number" id="krw" placeholder="輸入韓幣金額" oninput="convert('k2t')">
-            </div>
-            <p style="text-align: center; color: #aaa; margin: 10px 0;">↔️</p>
-            <div class="input-group">
-                <label>台幣 (TWD) $</label>
-                <input type="number" id="twd" placeholder="輸入台幣金額" oninput="convert('t2k')">
-            </div>
+    <div id="calc" class="section active">
+        <h3>💱 韓幣匯率計算</h3>
+        <div class="calc-row">
+            <label>設定匯率 (1台幣 = ?韓幣)</label>
+            <input type="number" id="rate" value="42" oninput="calc('r')">
         </div>
-    </div>
-
-    <div id="prep" class="content-section">
-        <h3>📋 釜山行前準備 Check List</h3>
-        <div class="check-list-card">
-            <div class="check-list-item"><input type="checkbox"> <span>護照/簽證 (K-ETA) 申請</span></div>
-            <div class="check-list-item"><input type="checkbox"> <span>釜山 Pass (VBP) 預訂</span></div>
-            <div class="check-list-item"><input type="checkbox"> <span>
+        <div class="calc-row">
+            <label>韓幣 (KRW) ₩</label>
+            <input type="number" id="krw" placeholder="輸入韓幣" oninput
