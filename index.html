@@ -5,87 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2026 釜山賞櫻之旅</title>
     <style>
-        :root { --primary-pink: #ffb7c5; --accent-pink: #ff8fa3; --bg-gray: #f8f9fa; }
-        body { font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; background-color: var(--bg-gray); margin: 0; padding: 0; color: #333; }
-        .hero { background: linear-gradient(rgba(255,183,197,0.4), rgba(255,183,197,0.4)), url('https://images.unsplash.com/photo-1528660351311-df232d9894e4?auto=format&fit=crop&q=80&w=1000'); background-size: cover; background-position: center; height: 200px; display: flex; align-items: center; justify-content: center; color: white; text-shadow: 2px 2px 10px rgba(0,0,0,0.3); flex-direction: column; }
-        .hero h1 { margin: 0; font-size: 2rem; letter-spacing: 2px; }
-        .container { max-width: 500px; margin: -30px auto 50px; padding: 0 15px; position: relative; }
-        .day-card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .day-header { display: flex; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #fff0f3; padding-bottom: 8px; }
-        .day-header h2 { color: var(--accent-pink); margin: 0; font-size: 1.2rem; }
-        .day-header .date { margin-left: auto; color: #888; font-size: 0.9rem; }
-        .schedule-item { display: flex; margin-bottom: 12px; }
-        .time { min-width: 55px; font-weight: bold; color: var(--accent-pink); font-size: 0.9rem; }
-        .content { padding-left: 12px; border-left: 2px solid #eee; flex: 1; }
-        .content b { display: block; font-size: 1rem; }
-        .content span { font-size: 0.85rem; color: #666; }
-        .tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 0.7rem; margin-left: 5px; font-weight: bold; vertical-align: middle; }
+        :root {
+            --primary: #ffb7c5;
+            --accent: #ff6b81;
+            --bg: #fff5f7;
+            --card-white: #ffffff;
+        }
+        body {
+            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            background-color: var(--bg);
+            margin: 0; padding: 0; color: #444;
+            line-height: 1.6;
+        }
+        /* 頂部橫幅 */
+        .hero {
+            background: linear-gradient(135deg, rgba(255,183,197,0.8), rgba(255,107,129,0.8)), 
+                        url('https://images.unsplash.com/photo-1528660351311-df232d9894e4?auto=format&fit=crop&q=80&w=1000');
+            background-size: cover; background-position: center;
+            height: 220px; display: flex; align-items: center; justify-content: center;
+            color: white; text-align: center; flex-direction: column;
+        }
+        .hero h1 { margin: 0; font-size: 2.2rem; text-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        
+        .container { max-width: 550px; margin: -40px auto 50px; padding: 0 15px; }
+
+        /* 互動卡片樣式 */
+        .day-card {
+            background: var(--card-white);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(255,183,197,0.2);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .day-card:hover { transform: translateY(-5px); }
+
+        .day-header {
+            padding: 20px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #fef0f2;
+        }
+        .day-header h2 { margin: 0; font-size: 1.25rem; color: var(--accent); }
+        .day-header .date { font-size: 0.9rem; color: #888; font-weight: bold; }
+
+        /* 行程內容區（預設展開，點擊可收合） */
+        .day-content {
+            padding: 0 20px 20px;
+            display: block; /* 初始狀態為顯示 */
+            animation: slideDown 0.4s ease-out;
+        }
+
+        .item {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        .item:last-child { border-bottom: none; }
+
+        .time {
+            min-width: 60px;
+            font-weight: 900;
+            color: var(--accent);
+            font-size: 0.95rem;
+        }
+        .info b { display: block; font-size: 1.05rem; color: #333; }
+        .info span { font-size: 0.85rem; color: #777; }
+
+        /* 標籤 */
+        .tag {
+            font-size: 0.7rem; padding: 2px 8px; border-radius: 6px;
+            margin-left: 5px; vertical-align: middle; font-weight: bold;
+        }
+        .tag-sakura { background: #ffe3e8; color: #ff4d6d; }
+        .tag-food { background: #fff4e6; color: #d35400; }
         .tag-vbp { background: #e3f2fd; color: #1976d2; }
-        .tag-food { background: #fff3e0; color: #e65100; }
-        .tag-sakura { background: #fff0f3; color: #d81b60; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
 <div class="hero">
-    <h1>釜山賞櫻之旅</h1>
-    <p>2026.04.08 - 04.13 | 孝親之旅</p>
+    <h1>🌸 2026 釜山賞櫻之旅</h1>
+    <p>與家人的溫馨六日遊</p>
 </div>
 
 <div class="container">
-    <div class="day-card">
+    <div class="day-card" onclick="toggleCard(this)">
         <div class="day-header">
-            <h2>Day 1 | 櫻花洗禮</h2>
-            <div class="date">04/08 (三)</div>
+            <h2>Day 1 | 雙倍櫻花震撼</h2>
+            <span class="date">04/08 (三)</span>
         </div>
-        <div class="schedule-item">
-            <div class="time">08:00</div>
-            <div class="content"><b>沙上豬肉湯飯</b><span class="tag tag-food">早餐</span><span>紅眼航班補體力首選</span></div>
-        </div>
-        <div class="schedule-item">
-            <div class="time">10:00</div>
-            <div class="content"><b>大渚生態公園</b><span class="tag tag-sakura">賞櫻</span><span>粉白櫻花與油菜花海</span></div>
-        </div>
-        <div class="schedule-item">
-            <div class="time">15:00</div>
-            <div class="content"><b>南川洞櫻花路</b><span class="tag tag-sakura">必去</span><span>浪漫櫻吹雪隧道</span></div>
+        <div class="day-content">
+            <div class="item">
+                <div class="time">08:00</div>
+                <div class="info"><b>沙上豬肉湯飯</b><span class="tag tag-food">推薦</span><span>下機第一餐暖胃</span></div>
+            </div>
+            <div class="item">
+                <div class="time">10:00</div>
+                <div class="info"><b>大渚生態公園</b><span class="tag tag-sakura">賞櫻</span><span>粉白櫻花隧道與油菜花</span></div>
+            </div>
+            <div class="item">
+                <div class="time">15:00</div>
+                <div class="info"><b>南川洞櫻花路</b><span class="tag tag-sakura">必看</span><span>海邊的最美櫻吹雪</span></div>
+            </div>
         </div>
     </div>
 
-    <div class="day-card">
+    <div class="day-card" onclick="toggleCard(this)">
         <div class="day-header">
-            <h2>Day 2 | 啟動 Pass</h2>
-            <div class="date">04/09 (四)</div>
-        </div>
-        <div class="schedule-item">
-            <div class="time">09:00</div>
-            <div class="content"><b>太宗台</b><span>搭乘遊園火車看海</span></div>
-        </div>
-        <div class="schedule-item">
-            <div class="time">16:30</div>
-            <div class="content"><b>松島纜車/雲橋</b><span class="tag tag-vbp">VBP啟動</span><span>絕美夕陽景觀</span></div>
-        </div>
-        <div class="schedule-item">
-            <div class="time">19:30</div>
-            <div class="content"><b>鑽石灣遊艇</b><span class="tag tag-vbp">VBP</span><span>夜遊廣安大橋</span></div>
-        </div>
-    </div>
-
-    <div class="day-card">
-        <div class="day-header">
-            <h2>Day 4 | 汗蒸幕放鬆</h2>
-            <div class="date">04/11 (六)</div>
-        </div>
-        <div class="schedule-item">
-            <div class="time">13:30</div>
-            <div class="content"><b>藍線公園膠囊火車</b><span class="tag tag-vbp">VBP</span><span>尾浦站發車</span></div>
-        </div>
-        <div class="schedule-item">
-            <div class="time">16:00</div>
-            <div class="content"><b>Spa Land</b><span class="tag tag-vbp">VBP</span><span>最頂級汗蒸幕體驗</span></div>
-        </div>
-    </div>
-</div>
-
-</body>
-</html>
+            <h2>Day
